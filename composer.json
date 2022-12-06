@@ -1,0 +1,35 @@
+{
+    "name": "metalinspired/multi-composer",
+    "description": "Composer plugin that helps with dependencies for projects that have multiple composer instances",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "metalinspired\\MultiComposer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Milan Divkovic",
+            "homepage": "https://github.com/metalinspired"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5 || ^8.0",
+        "composer-plugin-api": "^2.0"
+    },
+    "require-dev": {
+        "composer/composer": "^2.4",
+        "squizlabs/php_codesniffer": "^3.7.1",
+        "vimeo/psalm": "^4.30"
+    },
+    "extra": {
+        "class": "metalinspired\\MultiComposer\\Plugin"
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.5"
+        },
+        "platform-check": false
+    }
+}
