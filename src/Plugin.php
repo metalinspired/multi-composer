@@ -17,8 +17,10 @@ use Composer\Semver\Constraint\Constraint;
 use Exception;
 
 use function array_key_exists;
+use function array_keys;
 use function count;
 use function explode;
+use function in_array;
 use function is_array;
 use function is_dir;
 use function is_string;
@@ -115,7 +117,11 @@ class Plugin implements PluginInterface
                 }
             }
 
-            [$provides, $conflicts] = $this->getProvidesAndConflicts($packages, $packageName);
+            [$provides, $conflicts] = $this->getProvidesAndConflicts(
+                $packages,
+                $packageName,
+                array_keys($package->getDevRequires())
+            );
 
             $package->setProvides($provides);
             $package->setConflicts($conflicts);
@@ -149,9 +155,10 @@ class Plugin implements PluginInterface
     /**
      * @param BasePackage[] $packages
      * @param string $source
+     * @param string[] $sourceDevRequires
      * @return array
      */
-    private function getProvidesAndConflicts(array $packages, string $source): array
+    private function getProvidesAndConflicts(array $packages, string $source, array $sourceDevRequires): array
     {
         $provides = [];
         $conflicts = [];
@@ -169,13 +176,15 @@ class Plugin implements PluginInterface
                 $prettyVersion
             );
 
-            $conflicts[$name] = new Link(
-                $source,
-                $name,
-                $constraint,
-                Link::TYPE_CONFLICT,
-                "!=$prettyVersion"
-            );
+            if (!in_array($name, $sourceDevRequires, true)) {
+                $conflicts[$name] = new Link(
+                    $source,
+                    $name,
+                    $constraint,
+                    Link::TYPE_CONFLICT,
+                    "!=$prettyVersion"
+                );
+            }
         }
 
         return [$provides, $conflicts];
