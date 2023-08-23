@@ -117,13 +117,8 @@ class Plugin implements PluginInterface
 
             [$provides, $conflicts] = $this->getProvidesAndConflicts($packages, $packageName);
 
-            $package->setRequires([]);
             $package->setProvides($provides);
             $package->setConflicts($conflicts);
-
-            if (!$skipDev) {
-                $package->setDevRequires([]);
-            }
 
             if (!array_key_exists('autoload_psr-4', $configItem) || !$configItem['autoload_psr-4']) {
                 $autoload = $package->getAutoload();
